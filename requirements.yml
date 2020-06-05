@@ -1,0 +1,33 @@
+- src: https://github.com/Forcepoint/fp-pta-ansible-general-config.git
+  name: general-config
+  scm: git
+  version: "master"
+
+- src: https://github.com/Forcepoint/fp-pta-ansible-jenkins-node-jnlp.git
+  name: jenkins-node-jnlp
+  scm: git
+  version: "master"
+
+- src: https://github.com/Forcepoint/fp-pta-ansible-packer.git
+  name: packer
+  scm: git
+  version: "master"
+
+- src: https://github.com/Forcepoint/fp-pta-ansible-gnome.git
+  name: gnome
+  scm: git
+  version: "master"
+
+- src: https://github.com/Forcepoint/fp-pta-ansible-vmware-workstation.git
+  name: vmware-workstation
+  scm: git
+  version: "master"
+
+# These are referenced by other roles above, but they still have to be listed
+# because ansible has a bug that causes the dependent roles to not be updated
+# once they've been installed, even if the tip of branch has changed.
+
+- src: https://github.com/Forcepoint/fp-pta-ansible-ntp.git
+  name: ntp
+  scm: git
+  version: "master"

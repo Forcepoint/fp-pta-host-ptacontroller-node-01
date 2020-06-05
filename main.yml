@@ -1,0 +1,55 @@
+---
+
+- name: general configuration
+  hosts: PTAPacker
+  vars:
+    ntp_server: ntp.company.com
+  roles:
+  - role: general-config
+
+- name: packer
+  hosts: PTAPacker
+  vars:
+    packer_download_url: https://artifactory.company.com/artifactory/releases.hashicorp.com
+    # TODO: At the time of this writing, Hashicorp has released a version of packer that has the vsphere-iso build baked in, but I haven't tested it yet.
+    # Thus the default version of packer in the ansible role uses an older one, as is used here, and hence, the plugin needs to be installed.
+    packer_vsphere_iso_url: https://artifactory.company.com/artifactory/software/Hashicorp/Packer/jetbrains-infra/2.3/packer-builder-vsphere-iso.linux
+  roles:
+  - role: packer
+
+- name: gnome
+  hosts: PTAPacker
+  roles:
+  - role: gnome
+
+- name: vmware workstation
+  hosts: PTAPacker
+  vars:
+    vmware_workstation_download_url: https://artifactory.company.com/artifactory/software/VMware/VMware-Workstation-Full-14.1.2-8497320.x86_64.bundle
+    vmware_workstation_checksum: sha256:8932c681a8954c4aaf0e7d0039c6d8dff9ade323170d9a9a78553c98ffe16963
+    vmware_workstation_serial_num: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      12345678901234567890123456789012345678901234567890123456789012345678901234567890
+      12345678901234567890123456789012345678901234567890123456789012345678901234567890
+      12345678901234567890123456789012345678901234567890123456789012345678901234567890
+      12345678901234567890123456789012345678901234567890123456789012345678901234567890
+      12345678901234567890123456789012345678901234567890123456789012345678
+    vmware_workstation_version: 14.1.2
+  roles:
+  - role: vmware-workstation
+
+- name: connect to Jenkins
+  hosts: PTAPacker
+  vars:
+    jenkins_node_name: PTAPacker
+    jenkins_node_master_url: https://ptacontroller.company.com
+    jenkins_node_master_user: "{{ lookup('env','JENKINS_MASTER_USERNAME') }}"
+    jenkins_node_master_password: "{{ lookup('env','JENKINS_MASTER_PASSWORD') }}"
+    jenkins_node_user_password: "{{ lookup('env','JENKINS_NODE_PASSWORD') }}"
+    jenkins_node_labels: "PTAPacker packer"
+    jenkins_node_path: "/home/jenkins/node"
+    jenkins_node_executors: 1
+    jenkins_node_java_openjdk_version: 11
+    jenkins_node_master_ca_cert: /etc/pki/ca-trust/custom/internal_ca.pem
+  roles:
+  - role: jenkins-node-jnlp
