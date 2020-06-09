@@ -3,6 +3,8 @@
 This host is to be a Jenkins node solely used for running Packer builds,
 specifically with the 'vmware-iso' builder because VMware Workstation is installed.
 
+For information about PTA and how to use it please visit https://github.com/Forcepoint/fp-pta-overview/blob/master/README.md
+
 ## Jenkins
 
 You shouldn't need to run this by hand. You should be able to run it from the PTAController now.
