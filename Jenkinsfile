@@ -8,6 +8,7 @@ pipeline {
     }
     options {
         disableConcurrentBuilds()
+        buildDiscarder logRotator(numToKeepStr: '10')
     }
     //environment {
     // Uncomment TF_LOG if you're trying to debug a problem with Terraform.
